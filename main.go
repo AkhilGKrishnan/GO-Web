@@ -1,16 +1,22 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
-)
+import "github.com/gin-gonic/gin"
 
-// HandlerFunc function
-func HandlerFunc(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Wel to the world of hacking")
-}
+var router *gin.Engine
 
 func main() {
-	http.HandleFunc("/", HandlerFunc)
-	http.ListenAndServe(":3010", nil)
+
+	// Set the router as the default one provided by Gin
+	router = gin.Default()
+
+	// Process the templates at the start so that they don't have to be loaded
+	// from the disk again. This makes serving HTML pages very fast.
+	router.LoadHTMLGlob("templates/*")
+
+	// Initialize the routes
+	initializeRoutes()
+
+	// Start serving the application
+	router.Run()
+
 }
